@@ -1,0 +1,57 @@
+.counter {
+    width: 22em;       
+    display: flex;    
+
+}
+
+.panel-score {
+    height: 18em;
+    flex-grow: 1;  
+}
+
+.panel-counter {    
+    border: none;
+    border-radius: 0.05em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 11.8em;
+    color: black;
+    background-color: white;
+    height: 100%;
+    flex-grow: 1;  
+}
+
+.winner {
+    color: white;
+    background-color: green;
+}
+
+.warning {
+    background-color: yellow;    
+}
+
+.panel-control {
+    padding-top: 10px;
+    margin-top: 10px;
+    max-width: 4em;
+    margin-left: 0.3em;    
+}
+
+.left {
+    margin-right: 0.3em;
+}
+
+.panel-control button {
+    border: 1px solid gray;
+    background-color: initial;            
+    width: 100%;
+    height: 40%;
+    font-size: 1.4em;
+    padding: 0;
+    margin-top: 0.3em;
+    clear: both;    
+}
+
+.panel-control button:first-child {
+    margin-bottom: 30px;
+}

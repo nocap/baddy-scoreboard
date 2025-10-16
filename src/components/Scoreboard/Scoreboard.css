@@ -1,0 +1,10 @@
+.scoreboard {    
+    display: flex; 
+    margin-left: auto;
+    margin-right: auto;
+    width: 50em;
+}
+
+.scoreboard div{
+    flex-grow: 1;
+}
