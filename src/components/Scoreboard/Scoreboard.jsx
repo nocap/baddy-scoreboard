@@ -2,22 +2,19 @@ import { useState } from "react";
 import Counter from '../Counter/Counter'
 import './Scoreboard.css'
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import WinnerDialog from '../WinnerModal/WinnerModal';
+
 
 const initialPlayers = {
     A: {
         Name: "Player A",
         Score: 0,
-        Wins: 0
+        Win: 0
     },
     B: {
         Name: "Player B",
         Score: 0,
-        Wins: 0        
+        Win: 0        
     }
 };
 
@@ -29,7 +26,7 @@ const Scoreboard = () => {
     const [winningScore, setWinningScore] = useState(initialWinningScore);
     const [winnerDialog, setWinnerDialog] = useState(false);
     
-    const handleIncreaseClick = (p) => {
+    const handleIncreaseScore = (p) => {
         let player = getPlayerSymbol(p);
         let opponent = getOpponentSymbol(p);
         
@@ -50,14 +47,14 @@ const Scoreboard = () => {
         playersCopy[player].Score = score;            
 
         if (score == winningScore) {            
-            playersCopy[player].Wins = playersCopy[player].Wins + 1;            
+            playersCopy[player].Win = playersCopy[player].Win + 1;            
             setWinnerDialog(true);
         }
         
         setPlayers(playersCopy);
     };
 
-    const handeDecreaseClick = (player) => {
+    const handeDecreaseScore = (player) => {
         let symbol = getPlayerSymbol(player);
         
         let score = players[symbol].Score
@@ -84,6 +81,34 @@ const Scoreboard = () => {
         setWinnerDialog(false);
     }
 
+    const handleIncreaseWin  = (p) => {
+        let player = getPlayerSymbol(p);        
+        
+        let win = players[player].Win;
+        win = win + 1;
+
+        let playersCopy = {...players};
+        playersCopy[player].Win = win;
+
+        setPlayers(playersCopy);
+    }
+
+    const handleDecreaseWin  = (p) => {
+        let player = getPlayerSymbol(p);        
+        
+        let win = players[player].Win;
+
+        if (win == 0)
+            return;
+
+        win = win - 1;
+
+        let playersCopy = {...players};
+        playersCopy[player].Win = win;
+
+        setPlayers(playersCopy);
+    }
+
     const handleDialogCancel = () => {
         setWinnerDialog(false);
     }
@@ -99,25 +124,22 @@ const Scoreboard = () => {
     return (
         <>
             <div className="scoreboard">
-                <div>
-                    <Counter player={players.A} isWinner={winningScore == players.A.Score} onIncrease={()=>handleIncreaseClick(players.A)} onDecrease={()=>handeDecreaseClick(players.A)}/>
+                <div className="score_player_1">
+                    <Counter player={players.A} isWinner={winningScore == players.A.Score} onIncreaseScore={()=>handleIncreaseScore(players.A)} onDecreaseScore={()=>handeDecreaseScore(players.A)} onIncreaseWin={()=> handleIncreaseWin(players.A)} onDecreaseWin={()=>handleDecreaseWin(players.A)}/>
                 </div>
-                <div>
-                    <Counter controlAlign="right"  player={players.B} isWinner={winningScore == players.B.Score} onIncrease={()=>handleIncreaseClick(players.B)} onDecrease={()=>handeDecreaseClick(players.B)}/>
+                <div className="score_player_2">
+                    <Counter controlAlign="right"  player={players.B} isWinner={winningScore == players.B.Score} onIncreaseScore={()=>handleIncreaseScore(players.B)} onDecreaseScore={()=>handeDecreaseScore(players.B)} onIncreaseWin={()=> handleIncreaseWin(players.B)} onDecreaseWin={()=>handleDecreaseWin(players.B)}/>
                 </div>
             </div>
-            <Dialog open={winnerDialog}>
-                <DialogTitle>Win</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {players.A.Score == winningScore ? players.A.Name : players.B.Name} wins! 
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleScoreReset}>Reset Scores</Button>
-                    <Button onClick={handleDialogCancel}>Cancel</Button>
-                </DialogActions>
-            </Dialog>
+            
+            <div className="reset-panel">
+                {players.A.Score == winningScore || players.B.Score == winningScore ?
+                <Button variant="outlined" onClick={handleScoreReset}>Reset Scores</Button>
+                : null}
+            </div>
+            
+            <WinnerDialog isOpen={winnerDialog} onScoreReset={handleScoreReset} onClose={handleDialogCancel} player={winningScore == players.A.Score ? players.A : players.B}/>
+            
         </>
     )
 

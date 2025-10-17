@@ -2,9 +2,18 @@
     display: flex; 
     margin-left: auto;
     margin-right: auto;
-    width: 50em;
+    width: 55em;
 }
 
 .scoreboard div{
     flex-grow: 1;
+}
+
+
+.score_player_2 > .counter{
+    float: right;
+}
+
+.reset-panel {
+    margin-top: 3em;
 }
